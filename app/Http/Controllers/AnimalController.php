@@ -100,8 +100,7 @@ class AnimalController extends Controller
 
         $fileName = date('d.m.Y.H.i') . '.csv';
         
-        // Crear carpeta literal 'Model' en 'app' si no existe
-        $directory = app_path('Model');
+        $directory = app_path('Models');
         if (!file_exists($directory)) {
             mkdir($directory, 0755, true);
         }
