@@ -7,7 +7,6 @@ use App\Models\Animal;
 use App\Models\Especie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Storage;
 
 class AnimalController extends Controller
 {
@@ -83,7 +82,6 @@ class AnimalController extends Controller
         $animales = collect();
 
         if ($query) {
-            // Filtrado LIKE (case-insensitive por defecto en MySQL)
             $animales = Animal::where('especie', 'LIKE', '%' . $query . '%')->get();
         }
 
@@ -100,12 +98,17 @@ class AnimalController extends Controller
             $csvData .= $animal->especie . "," . $animal->cantidad . "\n";
         }
 
-        // Formato requerido: dia.mes.año.hora.minuto.csv
         $fileName = date('d.m.Y.H.i') . '.csv';
         
-        // Guardar en la carpeta Model dentro de storage/app
-        Storage::disk('local')->put('Model/' . $fileName, $csvData);
+        // Crear carpeta literal 'Model' en 'app' si no existe
+        $directory = app_path('Model');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+        
+        $path = $directory . '/' . $fileName;
+        file_put_contents($path, $csvData);
 
-        return Storage::download('Model/' . $fileName);
+        return response()->download($path);
     }
 }
