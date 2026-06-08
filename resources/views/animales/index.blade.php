@@ -11,7 +11,8 @@
     </div>
 
     <h2>Listado de Animales</h2>
-    <a href="#" class="btn">Dar de alta nueva especie</a>
+    
+    <a href="{{ route('animales.create') }}" class="btn">Dar de alta nueva especie</a>
     <a href="#" class="btn">Abrir página de consulta</a>
     <br><br>
 
